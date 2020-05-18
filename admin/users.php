@@ -15,8 +15,8 @@ $res = mysqli_query($con,$sql);
             </div>
             <div class="col-md-12">
                 <?php 
-            if(mysqli_num_rows($res) > 0){
-            ?>
+                 if(mysqli_num_rows($res) > 0){
+                 ?>
                 <table class="content-table">
                     <thead>
                         <th>S.No.</th>
@@ -43,8 +43,10 @@ $res = mysqli_query($con,$sql);
                             }
                             ?>
                             </td>
-                            <td class='edit'><a href='update-user.php'><i class='fa fa-edit'></i></a></td>
-                            <td class='delete'><a href='delete-user.php'><i class='fa fa-trash-o'></i></a></td>
+                            <td class='edit'><a href="update-user.php?id=<?php echo $row['user_id'] ?>"><i
+                                        class='fa fa-edit'></i></a></td>
+                            <td class='delete'><a href="delete-user.php?id=<?php echo $row['user_id'] ?>"><i
+                                        class='fa fa-trash-o'></i></a></td>
                         </tr>
                         <?php } ?>
                     </tbody>
@@ -59,4 +61,4 @@ $res = mysqli_query($con,$sql);
         </div>
     </div>
 </div>
-<?php require "header.php"; ?>
+<?php require "footer.php"; ?>
