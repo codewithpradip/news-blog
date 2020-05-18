@@ -1,7 +1,14 @@
 <?php
 require "header.php";
 require "config.php";
-$sql = "select * from user order by user_id desc";
+$limit = 5;
+if(isset($_GET['page'])){
+    $page = $_GET['page'];
+}else{
+    $page = 1;
+}
+$offset = ($page - 1) * $limit;
+$sql = "select * from user order by user_id desc limit $offset,$limit";
 $res = mysqli_query($con,$sql);
 ?>
 <div id="admin-content">
@@ -51,12 +58,31 @@ $res = mysqli_query($con,$sql);
                         <?php } ?>
                     </tbody>
                 </table>
-                <?php } ?>
-                <ul class='pagination admin-pagination'>
-                    <li class="active"><a>1</a></li>
-                    <li><a>2</a></li>
-                    <li><a>3</a></li>
-                </ul>
+                <?php }
+                $psql = "select * from user";
+                $pres = mysqli_query($con,$psql);
+                if(mysqli_num_rows($pres) > 0){
+                    $total_records = mysqli_num_rows($pres);
+                    $total_page = ceil($total_records/$limit);
+                    echo " <ul class='pagination admin-pagination'>";
+                    if($page > 1){
+                              echo "<li><a href='users.php?page=".($page - 1)."'>Prev</a></li>";
+                    }
+                    for($i = 1; $i <=  $total_page; $i++){
+                        if($i == $page){
+                            $active = "active";
+                        }else{
+                            $active = "";
+                        }
+                        echo "<li class='".$active."'><a href='users.php?page=".$i."'>".$i."</a></li>";
+                    }
+                    if($total_page > $page){
+                        echo "<li><a href='users.php?page=".($page + 1)."'>Next </a></li>";
+                    }
+                    echo "</ul>";
+                }
+                ?>
+                <!-- <li class="active"><a>1</a></li> -->
             </div>
         </div>
     </div>
