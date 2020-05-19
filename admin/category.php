@@ -1,6 +1,9 @@
 <?php
 require "header.php";
-require "config.php";
+if($_SESSION["user_role"] == 0){
+        header("Location:post.php");
+        die();
+    }
 $limit = 5;
 if(isset($_GET["page"])){
     $page = $_GET["page"];

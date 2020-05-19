@@ -1,6 +1,9 @@
 <?php 
 require "header.php";
-require "config.php";
+if($_SESSION["user_role"] == 0){
+        header("Location:post.php");
+        die();
+    }
 
 if( isset($_POST['save']) ){
         $category =mysqli_real_escape_string($con, $_POST['cat']);

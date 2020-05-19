@@ -1,5 +1,9 @@
 <?php 
 require "config.php";
+if($_SESSION["user_role"] == 0){
+        header("Location:post.php");
+        die();
+    }
 if(isset($_GET['id']) && $_GET['id']!=''){
     $id = $_GET['id'];
     $sql = "select * from user where user_id = '$id'";

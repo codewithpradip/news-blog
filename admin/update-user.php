@@ -1,6 +1,9 @@
 <?php
-require "config.php";
 require "header.php";
+if($_SESSION["user_role"] == 0){
+        header("Location:post.php");
+        die();
+    }
 $first_name="";
 $last_name="";
 $username="";
