@@ -1,7 +1,7 @@
 <?php
 require "header.php";
 require "config.php";
-$limit = 5;
+$limit = 3;
 if(isset($_GET['page'])){
     $page = $_GET['page'];
 }else{
@@ -66,7 +66,7 @@ $res = mysqli_query($con,$sql);
                     $total_page = ceil($total_records/$limit);
                     echo " <ul class='pagination admin-pagination'>";
                     if($page > 1){
-                              echo "<li><a href='users.php?page=".($page - 1)."'>Prev</a></li>";
+                              echo "<li><a href='users.php?page=".($page - 1)."'>Previous</a></li>";
                     }
                     for($i = 1; $i <=  $total_page; $i++){
                         if($i == $page){
@@ -77,7 +77,7 @@ $res = mysqli_query($con,$sql);
                         echo "<li class='".$active."'><a href='users.php?page=".$i."'>".$i."</a></li>";
                     }
                     if($total_page > $page){
-                        echo "<li><a href='users.php?page=".($page + 1)."'>Next </a></li>";
+                        echo "<li><a href='users.php?page=".($page + 1)."'>Next »</a></li>";
                     }
                     echo "</ul>";
                 }
