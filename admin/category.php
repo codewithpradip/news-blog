@@ -1,7 +1,7 @@
 <?php
 require "header.php";
 require "config.php";
-$limit = 3;
+$limit = 5;
 if(isset($_GET["page"])){
     $page = $_GET["page"];
 }
@@ -57,7 +57,6 @@ $offset = ($page-1)* $limit;
               $result_1 = mysqli_query($con,$sql1);
               $row_db = mysqli_fetch_row($result_1);
               $total_record = $row_db[0];
-              echo "$total_record";
               $total_page = ( $total_record / $limit);
               echo  "<ul class='pagination admin-pagination'>";
                   if($page>1){
