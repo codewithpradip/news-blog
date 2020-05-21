@@ -2,7 +2,6 @@
  require "header.php";
 
 if($_SESSION["user_role"] == 0){
-  include "config.php";
   $post_id = $_GET['id'];
   $sql2 = "SELECT author FROM post WHERE post_id = {$post_id}";
   $result2 = mysqli_query($con, $sql2) or die("Query Failed.");
@@ -24,8 +23,6 @@ if($_SESSION["user_role"] == 0){
             </div>
             <div class="col-md-offset-3 col-md-6">
                 <?php
-        
-
         $post_id = $_GET['id'];
         $sql = "SELECT post.post_id, post.title, post.description,post.post_img,
         category.category_name, post.category FROM post
@@ -64,11 +61,16 @@ if($_SESSION["user_role"] == 0){
 
                     $result1 = mysqli_query($con, $sql1) or die("Query Failed.");
 
-                    if(mysqli_num_rows($result1) > 0){
-                      while($row1 = mysqli_fetch_assoc($result1)){
-                        if($row['category'] == $row1['category_id']){
+                    if(mysqli_num_rows($result1) > 0)
+                    {
+                      while($row1 = mysqli_fetch_assoc($result1))
+                      {
+                        if($row['category'] == $row1['category_id'])
+                        {
                           $selected = "selected";
-                        }else{
+                        }
+                        else
+                        {
                           $selected = "";
                         }
                         echo "<option {$selected} value='{$row1['category_id']}'>{$row1['category_name']}</option>";
