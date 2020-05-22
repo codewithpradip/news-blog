@@ -103,9 +103,9 @@ $result = mysqli_query($con, $sql) or die("Query Failed.");
                         ?>
                 </div><!-- /post-container -->
             </div>
-            <!-- <?php
-             //include 'sidebar.php'; 
-             ?> -->
+            <?php
+             include 'sidebar.php'; 
+             ?>
         </div>
     </div>
 </div>

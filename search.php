@@ -8,15 +8,10 @@ require 'header.php';
                 <!-- post-container -->
                 <div class="post-container">
                     <?php
-                  if(isset($_GET['cid'])){
-                    $cat_id = $_GET['cid'];
-
-                    $sql1 = "SELECT * FROM category WHERE category_id = {$cat_id}";
-                    $result1 = mysqli_query($con, $sql1) or die("Query Failed.");
-                    $row1 = mysqli_fetch_assoc($result1);
-
+                  if(isset($_GET['search'])){
+                    $search_term = mysqli_real_escape_string($con, $_GET['search']);
                   ?>
-                    <h2 class="page-heading"><?php echo $row1['category_name']; ?> News</h2>
+                    <h2 class="page-heading">Search : <?php echo $search_term; ?></h2>
                     <?php
 
                     /* Calculate Offset Code */
@@ -32,10 +27,10 @@ require 'header.php';
                     category.category_name,user.username,post.category,post.post_img FROM post
                     LEFT JOIN category ON post.category = category.category_id
                     LEFT JOIN user ON post.author = user.user_id
-                    WHERE post.category = {$cat_id}
+                    WHERE post.title LIKE '%{$search_term}%' OR post.description LIKE '%{$search_term}%'
                     ORDER BY post.post_id DESC LIMIT {$offset},{$limit}";
 
-                    $result = mysqli_query($con, $sql) ;
+                    $result = mysqli_query($con, $sql);
                     if(mysqli_num_rows($result) > 0){
                       while($row = mysqli_fetch_assoc($result)) {
                   ?>
@@ -82,15 +77,19 @@ require 'header.php';
                     }
 
                     // show pagination
+                    $sql1 = "SELECT * FROM post
+                            WHERE post.title LIKE '%{$search_term}%'";
+                    $result1 = mysqli_query($con, $sql1) or die("Query Failed.");
+
                     if(mysqli_num_rows($result1) > 0){
 
-                      $total_records = $row1['post'];
+                      $total_records = mysqli_num_rows($result1);
 
                       $total_page = ceil($total_records / $limit);
 
                       echo '<ul class="pagination admin-pagination">';
                       if($page > 1){
-                        echo '<li><a href="category.php?cid='.$cat_id .'&page='.($page - 1).'">Prev</a></li>';
+                        echo '<li><a href="search.php?search='.$search_term .'&page='.($page - 1).'">Prev</a></li>';
                       }
                       for($i = 1; $i <= $total_page; $i++){
                         if($i == $page){
@@ -98,10 +97,10 @@ require 'header.php';
                         }else{
                           $active = "";
                         }
-                        echo '<li class="'.$active.'"><a href="category.php?cid='.$cat_id .'&page='.$i.'">'.$i.'</a></li>';
+                        echo '<li class="'.$active.'"><a href="search.php?search='.$search_term .'&page='.$i.'">'.$i.'</a></li>';
                       }
                       if($total_page > $page){
-                        echo '<li><a href="category.php?cid='.$cat_id .'&page='.($page + 1).'">Next</a></li>';
+                        echo '<li><a href="search.php?search='.$search_term .'&page='.($page + 1).'">Next</a></li>';
                       }
 
                       echo '</ul>';
@@ -116,6 +115,4 @@ require 'header.php';
         </div>
     </div>
 </div>
-<?php 
-require 'footer.php'; 
-?>
+<?php require 'footer.php'; ?>

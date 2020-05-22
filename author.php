@@ -8,37 +8,39 @@ require 'header.php';
                 <!-- post-container -->
                 <div class="post-container">
                     <?php
-                  if(isset($_GET['cid'])){
-                    $cat_id = $_GET['cid'];
+                if(isset($_GET['aid'])){
+                  $auth_id = $_GET['aid'];
 
-                    $sql1 = "SELECT * FROM category WHERE category_id = {$cat_id}";
-                    $result1 = mysqli_query($con, $sql1) or die("Query Failed.");
-                    $row1 = mysqli_fetch_assoc($result1);
+                  $sql1 = "SELECT * FROM post JOIN user
+                          ON post.author = user.user_id
+                          WHERE post.author = {$auth_id}";
+                  $result1 = mysqli_query($con, $sql1) or die("Query Failed.");
+                  $row1 = mysqli_fetch_assoc($result1);
 
-                  ?>
-                    <h2 class="page-heading"><?php echo $row1['category_name']; ?> News</h2>
+                ?>
+                    <h2 class="page-heading">News By <?php echo $row1['username']; ?></h2>
                     <?php
 
-                    /* Calculate Offset Code */
-                    $limit = 3;
-                    if(isset($_GET['page'])){
-                      $page = $_GET['page'];
-                    }else{
-                      $page = 1;
-                    }
-                    $offset = ($page - 1) * $limit;
+                  /* Calculate Offset Code */
+                  $limit = 3;
+                  if(isset($_GET['page'])){
+                    $page = $_GET['page'];
+                  }else{
+                    $page = 1;
+                  }
+                  $offset = ($page - 1) * $limit;
 
-                    $sql = "SELECT post.post_id, post.title, post.description,post.post_date,post.author,
-                    category.category_name,user.username,post.category,post.post_img FROM post
-                    LEFT JOIN category ON post.category = category.category_id
-                    LEFT JOIN user ON post.author = user.user_id
-                    WHERE post.category = {$cat_id}
-                    ORDER BY post.post_id DESC LIMIT {$offset},{$limit}";
+                  $sql = "SELECT post.post_id, post.title, post.description,post.post_date,post.author,
+                  category.category_name,user.username,post.category,post.post_img FROM post
+                  LEFT JOIN category ON post.category = category.category_id
+                  LEFT JOIN user ON post.author = user.user_id
+                  WHERE post.author = {$auth_id}
+                  ORDER BY post.post_id DESC LIMIT {$offset},{$limit}";
 
-                    $result = mysqli_query($con, $sql) ;
-                    if(mysqli_num_rows($result) > 0){
-                      while($row = mysqli_fetch_assoc($result)) {
-                  ?>
+                  $result = mysqli_query($con, $sql) or die("Query Failed.");
+                  if(mysqli_num_rows($result) > 0){
+                    while($row = mysqli_fetch_assoc($result)) {
+                ?>
                     <div class="post-content">
                         <div class="row">
                             <div class="col-md-4">
@@ -76,40 +78,40 @@ require 'header.php';
                         </div>
                     </div>
                     <?php
-                      }
-                    }else{
-                      echo "<h2>No Record Found.</h2>";
-                    }
-
-                    // show pagination
-                    if(mysqli_num_rows($result1) > 0){
-
-                      $total_records = $row1['post'];
-
-                      $total_page = ceil($total_records / $limit);
-
-                      echo '<ul class="pagination admin-pagination">';
-                      if($page > 1){
-                        echo '<li><a href="category.php?cid='.$cat_id .'&page='.($page - 1).'">Prev</a></li>';
-                      }
-                      for($i = 1; $i <= $total_page; $i++){
-                        if($i == $page){
-                          $active = "active";
-                        }else{
-                          $active = "";
-                        }
-                        echo '<li class="'.$active.'"><a href="category.php?cid='.$cat_id .'&page='.$i.'">'.$i.'</a></li>';
-                      }
-                      if($total_page > $page){
-                        echo '<li><a href="category.php?cid='.$cat_id .'&page='.($page + 1).'">Next</a></li>';
-                      }
-
-                      echo '</ul>';
                     }
                   }else{
                     echo "<h2>No Record Found.</h2>";
                   }
-                    ?>
+
+                  // show pagination
+                  if(mysqli_num_rows($result1) > 0){
+
+                    $total_records = mysqli_num_rows($result1);
+
+                    $total_page = ceil($total_records / $limit);
+
+                    echo '<ul class="pagination admin-pagination">';
+                    if($page > 1){
+                      echo '<li><a href="author.php?aid='.$auth_id .'&page='.($page - 1).'">Prev</a></li>';
+                    }
+                    for($i = 1; $i <= $total_page; $i++){
+                      if($i == $page){
+                        $active = "active";
+                      }else{
+                        $active = "";
+                      }
+                      echo '<li class="'.$active.'"><a href="author.php?aid='.$auth_id .'&page='.$i.'">'.$i.'</a></li>';
+                    }
+                    if($total_page > $page){
+                      echo '<li><a href="author.php?aid='.$auth_id .'&page='.($page + 1).'">Next</a></li>';
+                    }
+
+                    echo '</ul>';
+                  }
+                }else{
+                  echo "<h2>No Record Found.</h2>";
+                }
+                  ?>
                 </div><!-- /post-container -->
             </div>
             <?php require 'sidebar.php'; ?>
@@ -117,5 +119,5 @@ require 'header.php';
     </div>
 </div>
 <?php 
-require 'footer.php'; 
+require 'footer.php';
 ?>
