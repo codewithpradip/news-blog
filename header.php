@@ -39,12 +39,31 @@ require "config.php";
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
+                    <?php
+                    if(isset($_GET['cid'])){
+                        $cat_id = $_GET['cid'];
+                    }
+                        $sql = "select * from category where post > 0";
+                        $result = mysqli_query($con,$sql);
+                        if(mysqli_num_rows($result) > 0){
+                            $active = "";
+                    ?>
                     <ul class='menu'>
-                        <li><a href='category.php'>Business</a></li>
-                        <li><a href='category.php'>Entertainment</a></li>
-                        <li><a href='category.php'>Sports</a></li>
-                        <li><a href='category.php'>Politics</a></li>
+                        echo "<li><a href='index.php'>Home</a></li>";
+                        <?php 
+                            while($row = mysqli_fetch_assoc($result)) {
+                                if(isset($_GET['cid'])){
+                                     if($row['category_id']== $cat_id ){
+                                        $active = "active";
+                                    }else{
+                                        $active = "";
+                                }
+                                }
+                                echo "<li><a class='{$active}' href='category.php?cid={$row['category_id']}'>{$row['category_name']}</a></li>";
+                        } ?>
                     </ul>
+                    <?php
+                    } ?>
                 </div>
             </div>
         </div>
