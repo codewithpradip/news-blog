@@ -48,7 +48,7 @@ if(isset($_POST['login'])){
         <div class="container">
             <div class="row">
                 <div class="col-md-offset-4 col-md-4">
-                    <img class="logo" src="images/news.jpg">
+                    <img class="logo" src="images/newsblog.jpg">
                     <h3 class="heading">Admin</h3>
                     <!-- Form Start -->
                     <form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
