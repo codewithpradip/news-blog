@@ -76,7 +76,20 @@ $page = basename($_SERVER['PHP_SELF']);
             <div class="row">
                 <!-- LOGO -->
                 <div class=" col-md-offset-4 col-md-4">
-                    <a href="index.php" id="logo"><img src="images/news.jpg"></a>
+                    <?php
+                  $sql = "SELECT * FROM settings";
+
+                  $result = mysqli_query($con, $sql) or die("Query Failed.");
+                  if(mysqli_num_rows($result) > 0){
+                    while($row = mysqli_fetch_assoc($result)) {
+                      if($row['logo']==""){
+                        echo '<a href="index.php"><h1>'.$row['websitename'].'</h1></a>';
+                      }else{
+                         echo '<a href="index.php" id="logo"><img src="admin/images/'. $row['logo'] .'"></a>';
+                      }
+                    }
+                  }
+                ?>
                 </div>
                 <!-- /LOGO -->
             </div>
